@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -12,6 +14,14 @@ public class Tile : MonoBehaviour
     public int id
     {
         get { return _id; }
+    }
+
+    public static Tile GetTileById(int id)
+    {
+        Tile[] tilesArray = (Tile[])Resources.FindObjectsOfTypeAll(typeof(Tile));
+        List<Tile> tilesList = new List<Tile>();
+        tilesList.AddRange(tilesArray);
+        return tilesList.Find(item => item.id.Equals(id));
     }
 
     public void SetTile(int id, Sprite image)
@@ -35,6 +45,7 @@ public class Tile : MonoBehaviour
     {
         return !_isCovered;
     }
+
     private IEnumerator ApplyCharacter(Sprite image)
     {
         _isCovered = true;

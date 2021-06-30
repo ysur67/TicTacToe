@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class T3Controller : MonoBehaviour
@@ -13,8 +12,18 @@ public class T3Controller : MonoBehaviour
     public float offsetX = 2.0f;
     public float offsetY = 2.5f;
 
+    private CheckedCells _checkedCells;
+    public CheckedCells CheckedCells => _checkedCells;
+
+
+    public void AppendCheckedCells(Tile checkedTile)
+    {
+        _checkedCells.Add(checkedTile.id);
+    }
+
     private void Start()
     {
+        _checkedCells = new CheckedCells();
         Vector3 startPos = originalTile.transform.position;
         SetUpGrid(startPos);
     }
@@ -30,30 +39,12 @@ public class T3Controller : MonoBehaviour
                     tile = originalTile;
                 else
                     tile = Instantiate(originalTile) as Tile;
-                index++;
                 tile.SetTile(index, image);
-
                 float posX = (offsetX * i) + startPos.x;
                 float posY = (offsetY * j) + startPos.y;
                 tile.transform.position = new Vector3(posX, posY, startPos.z);
+                index++;
             }
         }
     }
-
-    private void Awake()
-    {
-        Messenger.AddListener(GameEvent.PLAYER_TURN, OnPlayerTurn);
-    }
-
-
-    private void OnDestroy()
-    {
-        Messenger.RemoveListener(GameEvent.PLAYER_TURN, OnPlayerTurn);
-    }
-
-    private void OnPlayerTurn()
-    {
-
-    }
-
 }

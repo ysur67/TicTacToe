@@ -1,20 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class T3Player : MonoBehaviour
+public class T3Player : PlayerBase
 {
-    [SerializeField] private Character character; 
-
-    private CheckedCells _checkedCells;
     private string username;
     public void SetUsername(string value) { username = value; }
-
-    private void Awake()
-    {
-        _checkedCells = new CheckedCells();
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -34,9 +26,14 @@ public class T3Player : MonoBehaviour
 
             if (tile.TrySetCharacter())
             {
-                tile.SetCharacter(character);
-                _checkedCells.AppendCheckedCells(id);
+                tile.SetCharacter(this.character);
+                controller.AppendCheckedCells(tile);
+                OnEndTurn.Invoke(this);
             }
         }
+    }
+    protected override void OnEndEnemyTurn(PlayerBase enemy)
+    {
+        Debug.Log("OVERRIDE");
     }
 }

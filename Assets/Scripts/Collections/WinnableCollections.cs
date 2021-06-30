@@ -1,13 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class WinnableCollections
 {
     private Dictionary<int, int[]> _winnableCollections;
 
-    WinnableCollections()
+    public WinnableCollections()
     {
+        _winnableCollections = new Dictionary<int, int[]>();
         _winnableCollections.Add(1, new int[] { 1, 2, 3 });
         _winnableCollections.Add(2, new int[] { 4, 5, 6 });
         _winnableCollections.Add(3, new int[] { 7, 8, 9 });

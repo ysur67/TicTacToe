@@ -4,5 +4,5 @@ using UnityEngine;
 
 public static class GameEvent
 {
-    public const string PLAYER_TURN = "PLAYER_TURN";
+    public const string PLAYER_END_TURN = "PLAYER_END_TURN";
 }
