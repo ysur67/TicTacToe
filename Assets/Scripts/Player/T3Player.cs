@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class T3Player : PlayerBase
 {
-    private string username;
-    public void SetUsername(string value) { username = value; }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -22,15 +20,20 @@ public class T3Player : PlayerBase
         {
             GameObject hitObject = hit.transform.gameObject;
             Tile tile = hitObject.GetComponent<Tile>();
-            int id = tile.id;
-
-            if (tile.TrySetCharacter())
-            {
-                tile.SetCharacter(this.character);
-                controller.AppendCheckedCells(tile);
-                OnEndTurn.Invoke(this);
-            }
+            if (tile)
+                ApplyTileClick(tile);
         }
+    }
+
+    private void ApplyTileClick(Tile tile)
+    {
+        if (!tile.TrySetCharacter())
+            return;
+
+        tile.SetCharacter(character);
+        controller.ApplyMove(tile, this);
+
+        OnEndTurn.Invoke(this);
     }
     protected override void OnEndEnemyTurn(PlayerBase enemy)
     {

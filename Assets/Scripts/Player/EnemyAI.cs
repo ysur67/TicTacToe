@@ -6,19 +6,25 @@ public class EnemyAI : PlayerBase
 {
     protected override void OnEndEnemyTurn(PlayerBase enemy)
     {
-        MakeChoice();
+        MakeChoice(enemy);
     }
-    /// <summary>
-    /// Выбор рандомной ячейки.
-    /// </summary>
-    private void MakeChoice()
+
+    private void MakeChoice(PlayerBase enemy)
     {
-        CheckedCells checkedCells = controller.CheckedCells;
-        List<int> emptyCells = Cells.GetAvailableCells(checkedCells);
-        int index = Cells.GetRandomValue(emptyCells);
+        var allCheckedCells = new List<int>();
+        allCheckedCells.AddRange(this.CheckedCells);
+        allCheckedCells.AddRange(enemy.CheckedCells);
+
+        if (controller.OutOfEmptyCells(allCheckedCells))
+            return;
+
+        List<int> emptyCells = CellsHelper.GetAvailableCells(allCheckedCells);
+        int index = CellsHelper.GetRandomValue(emptyCells);
         Tile tile = Tile.GetTileById(index);
         tile.SetCharacter(character);
-        controller.AppendCheckedCells(tile);
+        controller.ApplyMove(tile, this);
+
+
         OnEndTurn.Invoke(this);
     }
 }

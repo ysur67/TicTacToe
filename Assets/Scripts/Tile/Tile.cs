@@ -9,6 +9,10 @@ public class Tile : MonoBehaviour
     [SerializeField] private T3Controller controller;
     [SerializeField] private Character character;
     [SerializeField] private Sprite image;
+
+    public int Row { get; private set; }
+    public int Column { get; private set; }
+
     private int _id;
     private bool _isCovered = false;
     public int id
@@ -24,10 +28,12 @@ public class Tile : MonoBehaviour
         return tilesList.Find(item => item.id.Equals(id));
     }
 
-    public void SetTile(int id, Sprite image)
+    public void SetTile(int id, Sprite image, Vector2 position)
     {
         _id = id;
         GetComponent<SpriteRenderer>().sprite = image;
+        Row = (int)position.x;
+        Column = (int)position.y;
     }
 
 

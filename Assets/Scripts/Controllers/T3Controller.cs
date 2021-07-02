@@ -1,10 +1,11 @@
-using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class T3Controller : MonoBehaviour
 {
     [SerializeField] private Tile originalTile;
     [SerializeField] private Sprite image;
+    [SerializeField] private GameOverMenu gameOverMenu;
 
     public int gridCols = 3;
     public int gridRows = 3;
@@ -12,23 +13,26 @@ public class T3Controller : MonoBehaviour
     public float offsetX = 2.0f;
     public float offsetY = 2.5f;
 
-    private CheckedCells _checkedCells;
-    public CheckedCells CheckedCells => _checkedCells;
-
-
-    public void AppendCheckedCells(Tile checkedTile)
+    public void RaiseWin(PlayerBase player)
     {
-        _checkedCells.Add(checkedTile.id);
+        gameOverMenu.Open();
+        gameOverMenu.SetTitle($"Player {player.username} has won the game!");
+    }
+    
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 
     private void Start()
     {
-        _checkedCells = new CheckedCells();
-        Vector3 startPos = originalTile.transform.position;
-        SetUpGrid(startPos);
+        SetUpGrid();
+        gameOverMenu.Close();
     }
-    private void SetUpGrid(Vector3 startPos)
+
+    private void SetUpGrid()
     {
+        Vector3 startPos = originalTile.transform.position;
         int index = 0;
         for (int i = 0; i < gridCols; i++)
         {
@@ -39,7 +43,8 @@ public class T3Controller : MonoBehaviour
                     tile = originalTile;
                 else
                     tile = Instantiate(originalTile) as Tile;
-                tile.SetTile(index, image);
+                Vector2 gridPosition = new Vector2(j, i);
+                tile.SetTile(index, image, gridPosition);
                 float posX = (offsetX * i) + startPos.x;
                 float posY = (offsetY * j) + startPos.y;
                 tile.transform.position = new Vector3(posX, posY, startPos.z);
